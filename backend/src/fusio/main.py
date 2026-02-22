@@ -1,21 +1,15 @@
-# base from https://librosa.org/doc/latest/tutorial.html
-# edited by me
-# Beat tracking example
-import librosa
+from pathlib import Path
+from bpm import estimate_bpm
+from key import estimate_key
 
-# 1. Get the file path to an included audio example
-filename = "./../../../data/input/test.wav"
+audio_path = Path(__file__).resolve().parents[3] / "data" / "input" / "bm.mp3"
 
-# 2. Load the audio as a waveform `y`
-#    Store the sampling rate as `sr`
-y, sr = librosa.load(filename)
+def main():
+    bpm = estimate_bpm(audio_path)
+    key = estimate_key(audio_path)
 
-# 3. Run the default beat tracker
-tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
+    print(f"Estimated BPM: {bpm:.2f}")
+    print(f"Estimated Key: {key}")
 
-tempo = tempo.item()
-print(f"Estimated tempo: {tempo:.2f} beats per minute")
-
-
-# 4. Convert the frame indices of beat events into timestamps
-beat_times = librosa.frames_to_time(beat_frames, sr=sr)
+if __name__ == "__main__":
+    main()
